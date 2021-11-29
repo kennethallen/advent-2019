@@ -50,7 +50,7 @@ fn main() {
     .reduce(merge_wire_data)
     .unwrap();
   let part1 = coords.keys().map(|(x, y)| x.abs() + y.abs()).min().unwrap();
-  println!("Part 1: {:?}", part1);
+  println!("Part 1: {}", part1);
   let part2 = coords.values().min().unwrap();
-  println!("Part 2: {:?}", part2);
+  println!("Part 2: {}", part2);
 }
