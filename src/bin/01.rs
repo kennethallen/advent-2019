@@ -7,17 +7,15 @@ fn calc_fuel(mass: isize) -> Option<isize> {
 }
 
 fn main() {
-  let modules: Vec<isize> = read_lines("input/01.txt").unwrap()
-    .map(|line| line.unwrap().parse::<isize>().unwrap())
-    .collect();
-  let part1: isize = modules.iter().copied()
-    .flat_map(calc_fuel)
-    .sum();
+  let mut part1 = 0;
+  let mut part2 = 0;
+  for line in read_lines("input/01.txt").unwrap() {
+    let mass: isize = line.unwrap().parse().unwrap();
+    if let Some(fuel) = calc_fuel(mass) {
+      part1 += fuel;
+      part2 += iter::successors(Some(fuel), |&n| calc_fuel(n)).sum::<isize>();
+    }
+  }
   println!("Part 1: {}", part1);
-  let part2: isize = modules.iter().copied()
-    .map(|mass| iter::successors(Some(mass), |&n| calc_fuel(n))
-       .skip(1)
-       .sum::<isize>())
-    .sum();
   println!("Part 2: {}", part2);
 }
