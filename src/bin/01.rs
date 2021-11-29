@@ -2,8 +2,7 @@ use advent_2019::*;
 use std::iter;
 
 fn calc_fuel(mass: isize) -> Option<isize> {
-  let fuel = mass / 3 - 2;
-  if fuel > 0 { Some(fuel) } else { None }
+  Some(mass / 3 - 2).filter(|&n| n > 0)
 }
 
 fn main() {
