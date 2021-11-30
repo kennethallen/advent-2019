@@ -7,3 +7,4 @@ edition = "2018"
 
 [dependencies]
 strum = { version = "0.23", features = ["derive"] }
+divrem = "1.0.0"
