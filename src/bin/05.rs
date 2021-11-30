@@ -85,8 +85,8 @@ fn main() {
       .map(|word| word.parse().unwrap())
       .collect::<Vec<i32>>())
     .collect();
-  let part1 = intcode(&mut tape.clone(), vec![1]);
+  let part1 = intcode(&mut tape.clone(), [1]);
   println!("Part 1: {}", part1.last().unwrap());
-  let part2 = intcode(&mut tape.clone(), vec![5]);
+  let part2 = intcode(&mut tape.clone(), [5]);
   println!("Part 2: {}", part2.last().unwrap());
 }
