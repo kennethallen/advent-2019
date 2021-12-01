@@ -1,5 +1,5 @@
 use advent_2019::*;
-use std::collections::HashMap;
+use std::collections::{HashSet, HashMap, VecDeque};
 
 struct System {
   bodies: HashMap<String, Body>,
@@ -38,6 +38,24 @@ impl System {
       .map(|c| self.count_orbits_recurse(c, depth + 1))
       .sum::<usize>()
   }
+
+  fn orbit_distance(&self, start: &str, end: &str) -> usize {
+    let mut visited: HashSet<&str> = HashSet::new();
+    let mut queue = VecDeque::from([(start, 0)]);
+    while let Some((name, depth)) = queue.pop_front() {
+      if name == end {
+        return depth;
+      }
+      let node = self.bodies.get(name).unwrap();
+      for next in node.parents.iter().chain(node.children.iter()) {
+        if !visited.contains(next.as_str()) {
+          queue.push_back((next, depth + 1));
+        }
+      }
+      visited.insert(name); 
+    }
+    panic!["Destination not found"];
+  }
 }
 
 struct Body {
@@ -54,4 +72,6 @@ fn main() {
   }
   let part1 = system.count_orbits("COM");
   println!("Part 1: {}", part1);
+  let part2 = system.orbit_distance("YOU", "SAN") - 2;
+  println!("Part 2: {}", part2);
 }
