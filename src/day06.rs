@@ -1,4 +1,3 @@
-use advent_2019::*;
 use std::collections::{HashSet, HashMap, VecDeque};
 
 struct System {
@@ -9,6 +8,13 @@ impl System {
     System {
       bodies: HashMap::new(),
     }
+  }
+  fn parse<'a>(lines: impl IntoIterator<Item = &'a str>) -> System {
+    lines.into_iter().fold(System::new(), |mut system, line| {
+      let mut iter = line.split(")");
+      system.add_orbit(iter.next().unwrap(), iter.next().unwrap());
+      system
+    })
   }
 
   fn add_orbit(&mut self, parent_name: &str, child_name: &str) {
@@ -63,15 +69,28 @@ struct Body {
   children: Vec<String>,
 }
 
-fn main() {
-  let mut system = System::new();
-  for line_res in read_lines("input/06.txt").unwrap() {
-    let line = line_res.unwrap();
-    let mut iter = line.split(")");
-    system.add_orbit(iter.next().unwrap(), iter.next().unwrap());
+pub fn part1(lines: &Vec<String>) -> usize {
+  System::parse(lines.iter().map(String::as_str)).count_orbits("COM")
+}
+pub fn part2(lines: &Vec<String>) -> usize {
+  System::parse(lines.iter().map(String::as_str)).orbit_distance("YOU", "SAN") -2
+}
+
+#[cfg(test)]
+mod tests {
+  use crate::*;
+  fn in0() -> Vec<String> { to_vec_string(["COM)B", "B)C", "C)D", "D)E", "E)F", "B)G", "G)H", "D)I", "E)J", "J)K", "K)L"]) }
+  fn in1() -> Vec<String> { to_vec_string(["COM)B", "B)C", "C)D", "D)E", "E)F", "B)G", "G)H", "D)I", "E)J", "J)K", "K)L", "K)YOU", "I)SAN"]) }
+  fn in2() -> Vec<String> { read_lines("input/06.txt") }
+
+  #[test]
+  fn part1() {
+    assert_eq!(42, super::part1(&in0()));
+    assert_eq!(312697, super::part1(&in2()));
   }
-  let part1 = system.count_orbits("COM");
-  println!("Part 1: {}", part1);
-  let part2 = system.orbit_distance("YOU", "SAN") - 2;
-  println!("Part 2: {}", part2);
+  #[test]
+  fn part2() {
+    assert_eq!(4, super::part2(&in1()));
+    assert_eq!(466, super::part2(&in2()));
+  }
 }
